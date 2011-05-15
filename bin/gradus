@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'gli'
+require 'highline/import'
+
+$: << File.expand_path('../../lib', __FILE__)
+require 'gradus/add'
+require 'gradus_version'
+
+include GLI
+
+program_desc 'Keep track of your grades'
+version Gradus::VERSION
+
+config_file '.gradus_rc'
+
+desc 'To add things'
+command :add do |c|    
+  c.desc 'class name'
+  c.flag [:class]
+  
+  c.action do |global_options, options, args|
+    unless options[:class].nil?
+      puts "You are working with the class called #{options[:class]}"
+    end
+  end
+end
+
+desc 'To view things'
+command :view do |c|
+  c.desc 'view classes'
+  c.switch [:classes]
+  
+  c.action do |global_options, options, args|
+    if options[:classes]
+      puts 'Here is the list of classes'
+    end
+  end
+end
+
+on_error do |exception|
+  puts 'we got an error'
+  return true
+end
+
+exit run(ARGV)
+      
